@@ -43,16 +43,16 @@ stages:
     #   inputs:
     #     name: housework
 
-    - script: 'dotnet housework author src/*.csproj -s build.ini -r'
+    - script: '%USERPROFILE%/.dotnet/tools/housework.exe author src/*.csproj -s build.ini -r'
       displayName: 'author projects'
 
-    - script: 'dotnet housework substitute ./src/Parquet/ThriftFooter.cs -s build.ini -r'
+    - script: '%USERPROFILE%/.dotnet/tools/housework.exe substitute ./src/Parquet/ThriftFooter.cs -s build.ini -r'
       displayName: 'subst sources'
 
-    - script: 'dotnet housework setbuildnumber %Version% -s build.ini'
+    - script: '%USERPROFILE%/.dotnet/tools/housework.exe setbuildnumber %Version% -s build.ini'
       displayName: 'set build number'
 
-    - script: 'dotnet housework pushvars Version -s build.ini'
+    - script: '%USERPROFILE%/.dotnet/tools/housework.exe pushvars Version -s build.ini'
       displayName: 'push variables'
 
     - task: DotNetCoreCLI@2
