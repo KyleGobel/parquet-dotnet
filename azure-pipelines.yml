@@ -1,4 +1,5 @@
 trigger:
+
   batch: true
   branches:
     include:
@@ -71,6 +72,13 @@ stages:
       displayName: 'archive nugets'
       inputs:
         ArtifactName: nuget
+
+    - task: NuGetCommand@2
+      inputs:
+        command: 'push'
+        packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+        nuGetFeedType: 'external'
+        publishFeedCredentials: 'Parquet DotNet Adp MyGet'
 
     # - task: NuGetCommand@2
     #   condition: "ne(variables['Build.SourceBranch'], 'refs/heads/master')"
