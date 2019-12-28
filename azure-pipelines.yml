@@ -38,7 +38,7 @@ stages:
     - task: DotNetCoreCLI@2
       inputs:
         command: 'custom'
-        custom: 'tool -g install housework'
+        custom: 'tool install -g housework'
 
     # - task: petersendev.dotnet-global-tool-installer.DotnetGlobalToolInstaller.DotnetGlobalToolInstaller@0
     #   displayName: 'install housework'
