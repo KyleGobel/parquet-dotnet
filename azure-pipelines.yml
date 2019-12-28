@@ -38,11 +38,6 @@ stages:
     - script: 'dotnet tool install -g housework'
       displayName : 'install housework'
 
-    # - task: petersendev.dotnet-global-tool-installer.DotnetGlobalToolInstaller.DotnetGlobalToolInstaller@0
-    #   displayName: 'install housework'
-    #   inputs:
-    #     name: housework
-
     - script: '$HOME/.dotnet/tools/housework author src/*.csproj -s build.ini -r'
       displayName: 'author projects'
 
@@ -76,13 +71,7 @@ stages:
       inputs:
         ArtifactName: nuget
 
-    - task: NuGetCommand@2
-      inputs:
-        command: 'push'
-        packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-        nuGetFeedType: 'external'
-        publishFeedCredentials: 'Parquet DotNet Adp MyGet'
-
+   
     # - task: NuGetCommand@2
 
     #   condition: "ne(variables['Build.SourceBranch'], 'refs/heads/master')"
@@ -117,6 +106,32 @@ stages:
         command: test
         projects: ./src/Parquet.sln
         arguments: '-c release'
+
+- stage: Release
+  dependsOn: ['Build', 'Test']
+  condition: and(succeeded('Build'), succeeded('Test'))
+  jobs:
+   - deployment: MyGet
+     displayName: 'MyGet Feed'
+     pool:
+       vmImage: $(vmImage)
+     strategy:
+       runOnce:
+         deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'nuget'
+              downloadPath: '$(System.ArtifactsDirectory)'
+          - task: NuGetCommand@2
+            displayName: 'Push to MyGet'
+            inputs:
+              command: 'push'
+              packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+              nuGetFeedType: 'external'
+              publishFeedCredentials: 'Parquet DotNet Adp MyGet'
 
 # - stage: Release
 #   dependsOn: ['Build', 'Test']
