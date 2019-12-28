@@ -35,10 +35,15 @@ stages:
 
     steps:
 
-    - task: petersendev.dotnet-global-tool-installer.DotnetGlobalToolInstaller.DotnetGlobalToolInstaller@0
-      displayName: 'install housework'
+    - task: DotNetCoreCLI@2
       inputs:
-        name: housework
+        command: 'custom'
+        custom: 'tool -g install housework'
+
+    # - task: petersendev.dotnet-global-tool-installer.DotnetGlobalToolInstaller.DotnetGlobalToolInstaller@0
+    #   displayName: 'install housework'
+    #   inputs:
+    #     name: housework
 
     - script: 'housework author src/*.csproj -s build.ini -r'
       displayName: 'author projects'
@@ -81,6 +86,7 @@ stages:
         publishFeedCredentials: 'Parquet DotNet Adp MyGet'
 
     # - task: NuGetCommand@2
+
     #   condition: "ne(variables['Build.SourceBranch'], 'refs/heads/master')"
     #   displayName: 'push to internal feed'
     #   inputs:
