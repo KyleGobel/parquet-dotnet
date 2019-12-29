@@ -112,6 +112,7 @@ stages:
   condition: and(succeeded('Build'), succeeded('Test'))
   jobs:
    - deployment: MyGet
+     environment: live
      displayName: 'MyGet Feed'
      pool:
        vmImage: $(vmImage)
