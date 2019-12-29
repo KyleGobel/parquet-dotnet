@@ -1,4 +1,5 @@
 trigger:
+
   batch: true
   branches:
     include:
@@ -34,21 +35,19 @@ stages:
 
     steps:
 
-    - task: petersendev.dotnet-global-tool-installer.DotnetGlobalToolInstaller.DotnetGlobalToolInstaller@0
-      displayName: 'install housework'
-      inputs:
-        name: housework
+    - script: 'dotnet tool install -g housework'
+      displayName : 'install housework'
 
-    - script: 'housework author src/*.csproj -s build.ini -r'
+    - script: '$HOME/.dotnet/tools/housework author src/*.csproj -s build.ini -r'
       displayName: 'author projects'
 
-    - script: 'housework substitute ./src/Parquet/ThriftFooter.cs -s build.ini -r'
+    - script: '$HOME/.dotnet/tools/housework substitute ./src/Parquet/ThriftFooter.cs -s build.ini -r'
       displayName: 'subst sources'
 
-    - script: 'housework setbuildnumber %Version% -s build.ini'
+    - script: '$HOME/.dotnet/tools/housework setbuildnumber %Version% -s build.ini'
       displayName: 'set build number'
 
-    - script: 'housework pushvars Version -s build.ini'
+    - script: '$HOME/.dotnet/tools/housework pushvars Version -s build.ini'
       displayName: 'push variables'
 
     - task: DotNetCoreCLI@2
@@ -72,15 +71,17 @@ stages:
       inputs:
         ArtifactName: nuget
 
-    - task: NuGetCommand@2
-      condition: "ne(variables['Build.SourceBranch'], 'refs/heads/master')"
-      displayName: 'push to internal feed'
-      inputs:
-        command: 'push'
-        packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-        nuGetFeedType: 'internal'
-        publishVstsFeed: '4bab84c0-90f7-4425-afc6-ba077aa9757e/941c9975-4811-42dd-bd79-3cf33878bf77'
-        allowPackageConflicts: true
+   
+    # - task: NuGetCommand@2
+
+    #   condition: "ne(variables['Build.SourceBranch'], 'refs/heads/master')"
+    #   displayName: 'push to internal feed'
+    #   inputs:
+    #     command: 'push'
+    #     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    #     nuGetFeedType: 'internal'
+    #     publishVstsFeed: '4bab84c0-90f7-4425-afc6-ba077aa9757e/941c9975-4811-42dd-bd79-3cf33878bf77'
+    #     allowPackageConflicts: true
 
 - stage: Test
   #condition: succeeded('Build')
@@ -108,16 +109,16 @@ stages:
 
 - stage: Release
   dependsOn: ['Build', 'Test']
-  condition: "and( eq(variables['Build.SourceBranch'], 'refs/heads/master'), succeeded('Build'), succeeded('Test') )"
+  condition: and(succeeded('Build'), succeeded('Test'))
   jobs:
-  - deployment: NugetOrg
-    displayName: 'nuget.org public feed'
-    pool:
-      vmImage: $(vmImage)
-    environment: live
-    strategy:
-      runOnce:
-        deploy:
+   - deployment: MyGet
+     environment: live
+     displayName: 'MyGet Feed'
+     pool:
+       vmImage: $(vmImage)
+     strategy:
+       runOnce:
+         deploy:
           steps:
           - task: DownloadBuildArtifacts@0
             inputs:
@@ -126,20 +127,56 @@ stages:
               artifactName: 'nuget'
               downloadPath: '$(System.ArtifactsDirectory)'
           - task: NuGetCommand@2
-            displayName: nuget.org
+            displayName: 'Push to MyGet'
             inputs:
-              command: push
-              packagesToPush: '$(System.ArtifactsDirectory)/nuget/*.nupkg'
-              nuGetFeedType: external
-              publishFeedCredentials: 'nuget.org (aloneguid)'
+              command: 'push'
+              packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+              nuGetFeedType: 'external'
+              publishFeedCredentials: 'Parquet DotNet Adp MyGet'
           - task: GitHubRelease@1
             inputs:
-               gitHubConnection: 'aloneguid'
-               repositoryName: 'aloneguid/parquet-dotnet'
-               action: 'create'
-               target: '$(Build.SourceVersion)'
-               tagSource: 'userSpecifiedTag'
-               tag: '$(Build.BuildNumber)'
-               changeLogCompareToRelease: 'lastFullRelease'
-               changeLogType: 'commitBased'
+              gitHubConnection: 'Grant Authorization - Kyle Gobel'
+              repositoryName: 'KyleGobel/parquet-dotnet'
+              action: 'create'
+              target: '$(Build.SourceVersion)'
+              tagSource: 'userSpecifiedTag'
+              tag: '$(Build.BuildNumber)'
+              changeLogCompareToRelease: 'lastFullRelease'
+              changeLogType: 'commitBased'
+# - stage: Release
+#   dependsOn: ['Build', 'Test']
+#   condition: "and( eq(variables['Build.SourceBranch'], 'refs/heads/master'), succeeded('Build'), succeeded('Test') )"
+#   jobs:
+#   - deployment: NugetOrg
+#     displayName: 'nuget.org public feed'
+#     pool:
+#       vmImage: $(vmImage)
+#     environment: live
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - task: DownloadBuildArtifacts@0
+#             inputs:
+#               buildType: 'current'
+#               downloadType: 'single'
+#               artifactName: 'nuget'
+#               downloadPath: '$(System.ArtifactsDirectory)'
+          # - task: NuGetCommand@2
+          #   displayName: nuget.org
+          #   inputs:
+          #     command: push
+          #     packagesToPush: '$(System.ArtifactsDirectory)/nuget/*.nupkg'
+          #     nuGetFeedType: external
+          #     publishFeedCredentials: 'nuget.org (aloneguid)'
+          # - task: GitHubRelease@1
+          #   inputs:
+          #      gitHubConnection: 'aloneguid'
+          #      repositoryName: 'aloneguid/parquet-dotnet'
+          #      action: 'create'
+          #      target: '$(Build.SourceVersion)'
+          #      tagSource: 'userSpecifiedTag'
+          #      tag: '$(Build.BuildNumber)'
+          #      changeLogCompareToRelease: 'lastFullRelease'
+          #      changeLogType: 'commitBased'
 

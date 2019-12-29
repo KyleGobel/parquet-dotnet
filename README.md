@@ -4,17 +4,10 @@
 
 ## Status
 
-[![NuGet](https://img.shields.io/nuget/v/Parquet.Net.svg)](https://www.nuget.org/packages/Parquet.Net)
-
-**Parquet.Net is developed mostly by myself, and although I'm trying to invest some time in this project, it's not always possible to cut out time from my daily job or evenings. If you feel you'd like to sponsor me, please click the `Sponsor` button above and choose one of the available options.💰**
-
-![](doc/img/supportme.png)
+[![MyGet](https://img.shields.io/myget/kg-parquet-dotnet/v/Parquet.Net?color=DarkGreen&label=MyGet&style=for-the-badge)](https://www.myget.org/feed/Packages/kg-parquet-dotnet)
 
 
-
-| Build | Test |
-|------------|----------------|
-|![Azure DevOps builds (branch)](https://img.shields.io/azure-devops/build/aloneguid/4bab84c0-90f7-4425-afc6-ba077aa9757e/67/master?label=master)<br>![Azure DevOps builds (branch)](https://img.shields.io/azure-devops/build/aloneguid/4bab84c0-90f7-4425-afc6-ba077aa9757e/67/develop?label=develop)|![Azure DevOps tests (branch)](https://img.shields.io/azure-devops/tests/aloneguid/AllPublic/67/master?label=master%20%28Linux%29)<br>![Azure DevOps tests (branch)](https://img.shields.io/azure-devops/tests/aloneguid/AllPublic/67/master?label=master%20%28Windows%29)<br>![Azure DevOps tests (branch)](https://img.shields.io/azure-devops/tests/aloneguid/AllPublic/67/master?label=master%20%28MacOSX%29)<br><br>![Azure DevOps tests (branch)](https://img.shields.io/azure-devops/tests/aloneguid/AllPublic/67/develop?label=develop%20%28Linux%29)<br>![Azure DevOps tests (branch)](https://img.shields.io/azure-devops/tests/aloneguid/AllPublic/67/develop?label=develop%20%28Windows%29)<br>![Azure DevOps tests (branch)](https://img.shields.io/azure-devops/tests/aloneguid/AllPublic/67/develop?label=develop%20%28MacOSX%29)|
+![Azure DevOps builds (branch)](https://img.shields.io/azure-devops/build/kylegobel/9503277c-67dd-451d-ac9f-11f8c148d5fa/1/master?label=Pipelines%20Build&style=for-the-badge)
 
 
 **Fully managed** .NET library to read and write [Apache Parquet](https://parquet.apache.org/) files. Supports:
@@ -28,10 +21,6 @@ Runs on all flavors of Windows, Linux, MacOSX, mobile devices (iOS, Android) via
 ## Why
 
 Parquet library is mostly available for [Java](https://github.com/apache/parquet-mr), [C++](https://github.com/apache/parquet-cpp) and [Python](https://github.com/dask/fastparquet), which somewhat limits .NET/C# platform in big data applications. Whereas C# is a beautiful language (C# is just Java done right) working on all platforms and devices, we still don't have anything good in this area. Note that [ParquetSharp](https://github.com/G-Research/ParquetSharp) provides a P/Invoke wrapper around parquet-cpp library, however it's a windows-only version with plenty of limitations around usability, is generally slower and leaks memory.
-
-## Who
-
-Parquet.Net is used by many small and large organisations for production workloads. If you are one of them, please email [ivan@isolineltd.com](mailto:ivan@isolineltd.com) to be displayed here.
 
 ## Performance
 
@@ -64,7 +53,7 @@ You can track the [amount of features we have implemented so far](doc/features.m
 
 ## Getting started
 
-**Parquet.Net** is redistributed as a [NuGet package](https://www.nuget.org/packages/Parquet.Net). All the code is managed and doesn't have any native dependencies, therefore you are ready to go after referencing the package. This also means the library works on **Windows**, **Linux** and **MacOS X**.
+**Parquet.Net** is redistributed as a [NuGet package](https://www.myget.org/feed/kg-parquet-dotnet/package/nuget/Parquet.Net). All the code is managed and doesn't have any native dependencies, therefore you are ready to go after referencing the package. This also means the library works on **Windows**, **Linux** and **MacOS X**.
 
 ### General
 
@@ -162,23 +151,3 @@ Your privacy is important to us. Full details are specified in the [privacy stat
 We are desparately looking for new contributors to this projects. It's getting a lot of good use in small to large organisations, however parquet format is complicated and we're out of resources to fix all the issues.
 
 For details on how to start see [this guide](.github/CONTRIBUTING.md). If you are a developer who is interested in Parquet development please [read this guide](doc/parquet-getting-started.md)
-
-## Sponsorship
-
-This framework is free and can be used for free, open source and commercial applications. Parquet.Net (all code, NuGets and binaries) are under the [MIT License (MIT)](https://github.com/aloneguid/parquet-dotnet/blob/master/LICENSE). It's battle-tested and used by many awesome people and organisations. So hit the magic ⭐️ button, we appreciate it!!! 🙏 Thx!
-
-The core team members, Parquet.Net contributors and contributors in the ecosystem do this open source work in their free time. If you use Parquet.Net, and you'd like us to invest more time on it, please donate by pressing the ❤ **Sponsor** button on top of this page. This project increases your income/productivity/usabilty too.
-
-If your company/project is using Parquet.Net we'd be happy to list your logo here on the front page with your kind permission, absolutely for free. Please contact [ivan@isolineltd.com](mailto:ivan@isolineltd.com) with details and graphics attached.
-
-### Why charge/sponsor for open source?
-
- * [Open-Source Maintainers are Jerks! | Nick Randolph & Geoffrey Huntley](https://vimeo.com/296579853)
- * [FOSS is free as in toilet | Geoffroy Couprie](http://unhandledexpression.com/general/2018/11/27/foss-is-free-as-in-toilet.html)
- * [How to Charge for your Open Source | Mike Perham](https://www.mikeperham.com/2015/11/23/how-to-charge-for-your-open-source/)
- * [Sustain OSS: The Report](https://sustainoss.org/assets/pdf/SustainOSS-west-2017-report.pdf)
- * [Open Source Maintainers Owe You Nothing | Mike McQuaid](https://mikemcquaid.com/2018/03/19/open-source-maintainers-owe-you-nothing/)
- * [Who should fund open source projects? | Jane Elizabeth](https://jaxenter.com/who-funds-open-source-projects-133222.html)
- * [Apply at OSS Inc today| Ryan Chenkie](https://twitter.com/ryanchenkie/status/1067801413974032385)
- * [The Ethics of Unpaid Labor and the OSS Community | Ashe Dryden](https://www.ashedryden.com/blog/the-ethics-of-unpaid-labor-and-the-oss-community)
-
