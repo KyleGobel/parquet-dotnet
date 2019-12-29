@@ -135,7 +135,7 @@ stages:
               publishFeedCredentials: 'Parquet DotNet Adp MyGet'
           - task: GitHubRelease@1
             inputs:
-              gitHubConnection: 'GitHub - KyleGobel Personal'
+              gitHubConnection: 'Grant Authorization - Kyle Gobel'
               repositoryName: 'KyleGobel/parquet-dotnet'
               action: 'create'
               target: '$(Build.SourceVersion)'
