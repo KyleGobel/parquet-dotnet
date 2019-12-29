@@ -136,7 +136,7 @@ stages:
           - task: GitHubRelease@1
             inputs:
               gitHubConnection: 'GitHub - KyleGobel Personal'
-              repositoryName: '$(Build.Repository.Name)'
+              repositoryName: 'KyleGobel/parquet-dotnet'
               action: 'create'
               target: '$(Build.SourceVersion)'
               tagSource: 'userSpecifiedTag'
