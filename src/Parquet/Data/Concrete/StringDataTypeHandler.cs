@@ -117,15 +117,16 @@ namespace Parquet.Data.Concrete
 
       public override byte[] PlainEncode(Thrift.SchemaElement tse, string x)
       {
-         using (var ms = new MemoryStream())
-         {
-            using (var bs = new BinaryWriter(ms))
-            {
-               WriteOne(bs, x);
-            }
-
-            return ms.ToArray();
-         }
+         return Encoding.UTF8.GetBytes(x);
+         // using (var ms = new MemoryStream())
+         // {
+         //    using (var bs = new BinaryWriter(ms))
+         //    {
+         //       WriteOne(bs, x);
+         //    }
+         //
+         //    return ms.ToArray();
+         // }
       }
 
       public override object PlainDecode(Thrift.SchemaElement tse, byte[] encoded)
@@ -136,7 +137,7 @@ namespace Parquet.Data.Concrete
          {
             using (var br = new BinaryReader(ms))
             {
-               string element = ReadSingle(br, null, -1);
+               string element = ReadSingle(br, null, encoded.Length);
                return element;
             }
          }
