@@ -133,7 +133,16 @@ stages:
               packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
               nuGetFeedType: 'external'
               publishFeedCredentials: 'Parquet DotNet Adp MyGet'
-
+          - task: GitHubRelease@1
+            inputs:
+              gitHubConnection: 'GitHub - KyleGobel Personal'
+              repositoryName: '$(Build.Repository.Name)'
+              action: 'create'
+              target: '$(Build.SourceVersion)'
+              tagSource: 'userSpecifiedTag'
+              tag: '$(Build.BuildNumber)'
+              changeLogCompareToRelease: 'lastFullRelease'
+              changeLogType: 'commitBased'
 # - stage: Release
 #   dependsOn: ['Build', 'Test']
 #   condition: "and( eq(variables['Build.SourceBranch'], 'refs/heads/master'), succeeded('Build'), succeeded('Test') )"
